@@ -1,1 +1,10 @@
-Common Feature Tests (CFT) aims to provide a convenient set of feature tests (duh!) for Javascript (and JScript). It eliminates a need for browser sniffing, providing a much more robust way to work around environment quirks. None of the tests require presence of `document.body` and so can be run at any time. A "live" version is at http://yura.thinkweb2.com/cft/
+This is the a CFT version optimized for HbbTV. You can use the yellow
+and blue button to scroll up and down and the red one as a back button
+and the green one to reload the page. The result of the tests will be
+sent back to the server as a JSON string.
+
+Common Feature Tests (CFT) aims to provide a convenient set of feature
+tests (duh!) for Javascript (and JScript). It eliminates a need for
+browser sniffing, providing a much more robust way to work around 
+environment quirks. None of the tests require presence of
+`document.body` and so can be run at any time.

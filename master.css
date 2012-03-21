@@ -1,4 +1,4 @@
-body { font-family: Optima, Arial, serif; }
+body { font-family: Optima, Arial, serif; font-size: medium; padding-left: 50px; padding-right: 50px; background-color: #ffffff;}
 table { text-align: left; border-collapse: collapse; }
 th { background-color: #555; color: #eee; padding: 5px 10px; font-weight: normal; border: 1px solid #eee; }
 td.name { text-align: right; padding-right: 10px; width: 400px; }
