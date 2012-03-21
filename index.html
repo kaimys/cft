@@ -13,43 +13,13 @@
     <link rel="stylesheet" href="master.css" type="text/css" media="screen">
     
   </head>
-  <body>
+  <body onLoad="sendResults()">
+    <div id="scroll-area" style="position: relative">
+ 
+    <h1>Common feature tests</h1>
+    <script type="text/javascript">document.write(navigator.userAgent);</script>
+    <div id="test-status">performing tests</div>
     
-    <h1>Common feature tests:</h1>
-    <div>
-      <p>
-      Too many times I see Javascript authors fall into the trap of browser sniffing.
-      Feature detection is known to be a much better practice when it comes to creating robust scripts for general web.
-      Hopefully, this collection can serve as a repository of most common (non-trivial) feature tests.
-      Most of the tests require no presence of <code>document.body</code> and so can be run at any time. 
-      Otherwise, a note about <code>document.body</code> requirement is mentioned in test description.
-      All of the tests assume the presence of global <code>document</code> property. Everything else is tested before it's being used.
-      </p>
-			<p>
-			  For CSS support detection see <a href="style.html" title="Tests for CSS support"><code>getStyleProperty</code> and tests</a>.<br>
-			  For event support detection, see <a href="http://yura.thinkweb2.com/isEventSupported/" title="Tests for event support"><code>isEventSupported</code> and tests</a>.
-			</p>
-      <p>
-        <strong>Tested browsers</strong>: 
-        Interner Explorer 5.5 - 8,
-        Firefox 1.5.0.12 - 3.5,
-        Opera 7.54 - 10.10,
-        Safari 2.0 - 4.0.4,
-        Mobile Safari 3.2,
-        Chrome 0.4.154.29 - 3.0.192.0,
-        Camino 1.6.6 - 1.6.8,
-        Konqueror 4.2.2,
-        BlackBerry 9000 (Bold), 9530 (Storm)
-      </p>
-      <p>
-        Found an error or have a suggestion? <a href="mailto:kangax@gmail.com" title="author email">Please, tell me about it</a>
-      </p>
-      <p>Source and history are <a href="http://github.com/kangax/cft" title="CFT on GitHub">available on GitHub</a></p>
-    </div>
-    
-    <span id="last-updated" class="dtstart">Last updated: <abbr class="dtstamp" title="20110529T000000">May 29, 2011</abbr></span>
-    
-    <h2>Features:</h2>
     <table id="cft-data">
       <thead>
         <tr>
@@ -539,17 +509,122 @@
         
       </tbody>
     </table>
+
+    <span id="last-updated" class="dtstart">Last updated: <abbr class="dtstamp" title="20110529T000000">May 29, 2011</abbr></span>
+    
+    <div>
+      <p>
+      Too many times I see Javascript authors fall into the trap of browser sniffing.
+      Feature detection is known to be a much better practice when it comes to creating robust scripts for general web.
+      Hopefully, this collection can serve as a repository of most common (non-trivial) feature tests.
+      Most of the tests require no presence of <code>document.body</code> and so can be run at any time. 
+      Otherwise, a note about <code>document.body</code> requirement is mentioned in test description.
+      All of the tests assume the presence of global <code>document</code> property. Everything else is tested before it's being used.
+      </p>
+            <p>
+              For CSS support detection see <a href="style.html" title="Tests for CSS support"><code>getStyleProperty</code> and tests</a>.<br>
+              For event support detection, see <a href="http://yura.thinkweb2.com/isEventSupported/" title="Tests for event support"><code>isEventSupported</code> and tests</a>.
+            </p>
+      <p>
+        <strong>Tested browsers</strong>: 
+        Interner Explorer 5.5 - 8,
+        Firefox 1.5.0.12 - 3.5,
+        Opera 7.54 - 10.10,
+        Safari 2.0 - 4.0.4,
+        Mobile Safari 3.2,
+        Chrome 0.4.154.29 - 3.0.192.0,
+        Camino 1.6.6 - 1.6.8,
+        Konqueror 4.2.2,
+        BlackBerry 9000 (Bold), 9530 (Storm)
+      </p>
+      <p>
+        Found an error or have a suggestion? <a href="mailto:kangax@gmail.com" title="author email">Please, tell me about it</a>
+      </p>
+      <p>Source and history are <a href="http://github.com/kangax/cft" title="CFT on GitHub">available on GitHub</a></p>
+    </div>
+    
+    </div>
     
     <script src="feature_tests.js" type="text/javascript"></script>
     <script src="master.js" type="text/javascript"></script>
-    
+    <script src="json.js" type="text/javascript"></script>
+        
     <script type="text/javascript">
-      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    </script>
     
-    <script type="text/javascript">
-      try { var pageTracker = _gat._getTracker("UA-735042-3"); pageTracker._trackPageview(); } catch(err) {}
+        function sendResults() {
+        	try {
+		        var status = document.getElementById("test-status");
+		        status.innerHTML = 'preparing ajax request';   
+		        var data = {};
+		        data.features = window.__features;
+		        data.bugs = window.__bugs;
+		        data.userAgent = navigator.userAgent;
+		        data.platform = navigator.platform;
+		        data.language = navigator.language;
+		        data.cookieEnabled = navigator.cookieEnabled;
+		        data.appVersion = navigator.appVersion;
+		        data.appName = navigator.appName;
+		        data.appCodeName = navigator.appCodeName;
+		        var dataString = JSON.stringify(data);
+		        var req = new XMLHttpRequest();
+		        req.open('POST', './collect_browser_info.php', true);
+		        req.setRequestHeader("Content-type", "application/json");
+		        req.setRequestHeader("Content-length", dataString.length);
+		        req.setRequestHeader("Connection", "close");
+		        req.onreadystatechange = function() { //Call a function when the state changes.
+		            if(req.readyState == 4 && req.status == 200) {
+		                status.innerHTML = 'Request returned: ' + req.responseText;
+		            }
+		        }
+		        req.send(dataString);
+        	} catch (e) {
+                status.innerHTML = 'Catched exception: ' + e;
+        	}
+        }
+    
+	    var VK_0        = 48;
+	    var VK_1        = 49;
+	    var VK_2        = 50;
+	    var VK_3        = 51;
+	    var VK_4        = 52;
+	    var VK_RED      = 403;
+	    var VK_GREEN    = 404;
+	    var VK_YELLOW   = 405;
+	    var VK_BLUE     = 406; 
+
+        var winPos = 0;
+
+        document.onkeypress = function keyHandler (event) {
+            try {
+                var keyCode = key = event.keyCode || event.which;
+                var table = document.getElementById("scroll-area");
+                switch (keyCode) {
+	                case VK_BLUE:
+                    case VK_4:
+	                	winPos -= 50;
+	                    table.style.top = winPos + "px";
+	                	break
+	                case VK_GREEN:
+                    case VK_2:
+                        location.reload();
+                        break
+	                case VK_RED:
+	                case VK_1:
+	                	history.back();
+	                	break;
+	                case VK_YELLOW:
+                    case VK_3:
+                    	if(winPos < 0) {
+	                        winPos += 50;
+	                        table.style.top = winPos + "px";
+                    	}
+	                    break;
+	                }
+            } catch (e) {
+                alert("KeyHandler " + e);
+            }
+        }
+
     </script>
     
   </body>
