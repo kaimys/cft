@@ -2,8 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "ce-html-1.0-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title>HbbTV Tests Mainpage</title>
-  <!-- meta http-equiv="content-type" content="application/ce-html+xml; charset=utf-8"/ -->
+  <title>HbbTV Check</title>
+  <meta http-equiv="content-type" content="application/ce-html+xml; charset=utf-8"/>
   
   <style type="text/css">
     * {
@@ -11,12 +11,26 @@
       font-family:sans-serif;
     }
     #screen {
-      margin:35px 0px 20px 63px;
-      padding: 20px;
+      margin:40px 0 0 60px;
       width:75%;
     }
     #time {
       text-align:right;
+    }
+    span {
+      display:block;
+      float:left;
+      width:auto;
+      margin:0 2px 2px 0;
+      padding:2px 5px;
+    }
+    .no {
+      color:#ffffff;
+      background-color:#ff0000;
+    }
+    .yes {
+      color:#ffffff;
+      background-color:#2C9320;
     }
     table,td {
       border:1px solid #000;
@@ -28,10 +42,6 @@
     th,td {
       text-align:left;
       padding:2px 4px;
-    }
-    a:focus {
-        background-color:#800;
-        color: #fff;
     }
   </style>
   
@@ -55,6 +65,24 @@
       document.getElementById("platform").innerHTML = navigator.platform;
       document.getElementById("userAgent").innerHTML = navigator.userAgent;
     
+      /* Modernizr Classes */
+      var allClasses = document.getElementsByTagName('html')[0].getAttribute("class");
+      var clean = allClasses.split(" ");
+      var x = '';
+
+      for (i=0;i<clean.length;i++) {
+        if(clean[i]!='') {
+          var no = clean[i].substr(0,3);
+          if(no === "no-") {
+            x += '<span class="no">'+clean[i]+"</span>";
+          }
+          else {
+            x += '<span class="yes">'+clean[i]+"</span>";
+          }
+        }
+      }
+    
+      document.getElementById("output").innerHTML = x;
     }
   
     function checkKey (e) {
@@ -105,11 +133,8 @@
     </tr>
     </table>
   
-    <ul>
-    <li><a href="cft-tests.html" tabindex="1">Common feature tests (cft)</a></li>
-    <li><a href="modernizr-tests.html" tabindex="2">modernizr tests</a></li>
-    <li><a href="http://itv.mit-xperts.com/hbbtvtest/index.php" tabindex="3">MIT-experts HBBTV Testsuite</a></li>
-    </ul>
+    <h2>Test Output</h2>
+    <p id="output"></p>
 
   </div>
 
